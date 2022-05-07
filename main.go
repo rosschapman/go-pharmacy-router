@@ -1,9 +1,11 @@
 package main
 
 import (
-	cashPharmacy "dispense/cash-pharmacy"
 	"dispense/drug"
-	"fmt"
+	cashPharmacy "dispense/pharmacy/cash"
+	insurancePharmacy "dispense/pharmacy/insurance"
+	"math/rand"
+	"time"
 )
 
 type PharmacyBase interface {
@@ -14,13 +16,14 @@ type PharmacyBase interface {
 }
 
 func main() {
-	phc1 := cashPharmacy.PharmacyCash{Inventory: map[drug.DrugId]int{1: 10, 2: 20, 3: 30}}
+	rand.Seed(time.Now().UnixNano())
 
-	fmt.Println(phc1.CheckInventory(1))
-	fmt.Println(phc1.DispenseDrug(4))
-	fmt.Println(phc1.CheckInventory(1))
-	fmt.Println(phc1.DispenseDrug(1))
-	phc1.LoadInventory(2, 10)
-	fmt.Println(phc1.CheckInventory(2))
+	phc1 := cashPharmacy.PharmacyCash{}
+	phc1.Init("AdamsGreens")
+
+	phc2 := insurancePharmacy.PharmacyInsurance{}
+	phc2.Init("Rite Ross")
+
 	phc1.DisplayFullInventory()
+	phc2.DisplayFullInventory()
 }
