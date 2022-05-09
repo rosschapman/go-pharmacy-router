@@ -3,7 +3,6 @@ package cashPharmacy
 import (
 	"dispense/drug"
 	"fmt"
-	"math/rand"
 	"strings"
 )
 
@@ -18,7 +17,7 @@ func (phc *PharmacyCash) Init(name string) {
 	(phc.inventory) = make(map[drug.DrugId]int)
 
 	for i := 0; i < len(drug.DrugMap); i++ {
-		phc.LoadInventory((drug.DrugId(i)), rand.Intn(100))
+		phc.LoadInventory((drug.DrugId(i)), 10)
 	}
 }
 
@@ -33,7 +32,6 @@ func (phc PharmacyCash) CheckInventory(drug drug.DrugId) (int, error) {
 }
 
 func (phc PharmacyCash) DispenseDrug(drug drug.DrugId) error {
-	fmt.Printf("Pharmacy(%s): Dispensing %s\n", phc.name, drug)
 	quantity, err := phc.CheckInventory(drug)
 
 	if err != nil {
@@ -42,15 +40,17 @@ func (phc PharmacyCash) DispenseDrug(drug drug.DrugId) error {
 
 	if quantity > 0 {
 		phc.inventory[drug] -= 1
+		fmt.Printf("Pharmacy(%s): Dispensing %s with Cash Payment\n", phc.name, drug)
+	} else {
+		fmt.Printf("Pharmacy(%s): No more inventory for %s\n", phc.name, drug)
 	}
 
 	return nil
 }
 
 func (phc PharmacyCash) LoadInventory(drug drug.DrugId, quantity int) {
-	fmt.Printf("Pharmacy(%s): Loading Inventory Item %s\n", phc.name, drug)
-
 	_, err := phc.CheckInventory(drug)
+	fmt.Printf("Pharmacy(%s): Loading Inventory Item %s\n", phc.name, drug)
 
 	if err != nil {
 		phc.inventory[drug] = 0
@@ -62,8 +62,8 @@ func (phc PharmacyCash) LoadInventory(drug drug.DrugId, quantity int) {
 func (phc PharmacyCash) DisplayFullInventory() {
 	var inventory strings.Builder
 	for drug, quantity := range phc.inventory {
-		fmt.Fprintf(&inventory, "\t%s Quantity: %d\n", drug, quantity)
+		fmt.Fprintf(&inventory, "    %s - Quantity: %d\n", drug, quantity)
 	}
 
-	fmt.Printf("Pharmacy: %s\nInventory [\n%s\n]\n", phc.name, &inventory)
+	fmt.Printf("Pharmacy: {\n  name: %s\n  inventory: [\n%s\n  ]\n}\n", phc.name, &inventory)
 }
