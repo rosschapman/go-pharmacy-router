@@ -1,33 +1,35 @@
 package main
 
 import (
-	"dispense/drug"
-	cashPharmacy "dispense/pharmacy/cash-pharmacy"
-	insurancePharmacy "dispense/pharmacy/insurance-pharmacy"
+	"dispense/drugs"
+	"dispense/pharmacy"
+	"dispense/router"
+	"fmt"
+	"math/rand"
+	"time"
 )
 
-type PharmacyBase interface {
-	DispenseDrug(drug drug.DrugId) error
-	LoadInventory(drug drug.DrugId, quantity int)
-	CheckInventory(drug drug.DrugId) (int, error)
-	DisplayFullInventory()
-}
-
 func main() {
-	drug.LoadDrugMap(10)
+	rand.Seed(time.Now().UnixNano())
 
-	phCash := cashPharmacy.PharmacyCash{}
-	phCash.Init("AdamsGreens")
+	drugs.LoadDrugMap(10)
 
-	phIns := insurancePharmacy.PharmacyInsurance{}
-	phIns.Init("Rite Ross")
+	phCash := &pharmacy.PharmacyCash{}
+	phCash.Init("AdamGreens", 10)
 
-	phCash.DisplayFullInventory()
-	phIns.DisplayFullInventory()
-
-	phCash.DispenseDrug(1)
-	phIns.DispenseDrug(3)
+	phIns := &pharmacy.PharmacyInsurance{}
+	phIns.Init("Rite Ross", 10)
 
 	phCash.DisplayFullInventory()
 	phIns.DisplayFullInventory()
+
+	pRouter := router.PharmacyRouter{Cash: phCash, Insurance: phIns}
+
+	for i := 0; i < 11; i++ {
+		err := pRouter.ProcessOrder(drugs.DrugId(i))
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println()
+	}
 }

@@ -1,4 +1,4 @@
-package drug
+package drugs
 
 import (
 	"fmt"

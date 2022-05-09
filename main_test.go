@@ -9,3 +9,9 @@ func BenchmarkMain(b *testing.B) {
 		main()
 	}
 }
+
+func TestMain(t *testing.T) {
+	t.Run("test main method", func(t *testing.T) {
+		main()
+	})
+}
