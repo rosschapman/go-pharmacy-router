@@ -15,4 +15,4 @@ I recommend people pair up for this exercise, or even do it as a full group exer
 ProcessOrder(drug drugid) error
   - This method will choose the pharmacy that as the specified drug in its inventory, if both pharmacies have the drug in inventory it shall chose the one with the largest inventory. If they are the same, it shall pick one at random. If it is unable to process the drug, it shall return an error.
 - [ ] In main, load up the pharmacies and then exercise the Processing of the drugs.
-- [ ] Make sure there is full test coverage and Benchmarking.
+- [ ] Make sure there is full test coverage and Benchmarking. (DisplayFullInventory doesn't have an output to necessarily test, work around is to read from os.Stdin if we really wanted 100% test coverage)
